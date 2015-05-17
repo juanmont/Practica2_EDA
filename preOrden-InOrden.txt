@@ -1,0 +1,30 @@
+template <class P>
+Arbin<P> crea_Arbin_Pre_In(List<P> &preorden, List<P> &inorden){
+	List<P>::Iterator itPreorden = preorden.begin();
+	List<P>::Iterator itInorden = inorden.begin();
+	List<P> preordenIZ;
+	List<P> inordenIZ;
+
+	int n = itPreorden.elem();
+	if (preorden.size() == 1)
+		return Arbin<P>(Arbin<P>(), n, Arbin<P>());
+	else{
+		itPreorden = preorden.erase(itPreorden);
+		while (itInorden.elem() != n){
+			preordenIZ.push_back(itPreorden.elem());
+			inordenIZ.push_back(itInorden.elem());
+			itPreorden = preorden.erase(itPreorden);
+			itInorden = inorden.erase(itInorden);
+			if (itInorden == inorden.end())
+				n = itInorden.elem();
+
+		}
+		itInorden = inorden.erase(itInorden);
+		if (!inorden.empty() && !preorden.empty())
+			return Arbin<P>(crea_Arbin_Pre_In(preordenIZ, inordenIZ), n, crea_Arbin_Pre_In(preorden, inorden));
+		else if (preordenIZ.empty())
+			return Arbin<P>(Arbin<P>(), n, crea_Arbin_Pre_In(preorden, inorden));
+		else
+			return Arbin<P>(crea_Arbin_Pre_In(preordenIZ, inordenIZ), n, Arbin<P>());
+	}
+}
